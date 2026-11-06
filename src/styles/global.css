@@ -1,0 +1,205 @@
+@import 'tailwindcss';
+
+@theme {
+  /* design-artifact 禁止链接字体 CDN，这里只用本地系统字体栈 */
+  --font-serif: 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  /* 浅色内容区 */
+  --color-paper: #faf9f6;
+  --color-paper-deep: #f1efe9;
+  --color-paper-shade: #e8e5dd;
+
+  /* 文字 */
+  --color-ink: #16181a;
+  --color-ink-soft: #3d4348;
+  --color-ink-mute: #5f666b;
+  /* 在 paper-deep 上仍满足 WCAG AA 4.5 */
+  --color-ink-faint: #626a6e;
+
+  /* 分隔线 */
+  --color-rule: #dcdad3;
+  --color-rule-soft: #eceae4;
+
+  /* 绿色强调：深绿用于文字与选中态，亮绿用于按钮 */
+  --color-accent: #146e45;
+  --color-brand: #3ddc84;
+
+  /* 深色 hero */
+  --color-night: #0e1110;
+  --color-night-soft: #1a1e1c;
+  --color-night-line: #2b302d;
+
+  /* 插画配色 */
+  --color-art-blue: #3b5bdb;
+  --color-art-purple: #8b6cf0;
+  --color-art-green: #21a06b;
+  --color-art-pink: #ee6aa8;
+  --color-art-cream: #f0e9d8;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (max-width: 767px) {
+    html {
+      scroll-padding-top: 7.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: var(--color-night);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-mono);
+    font-variant-ligatures: none;
+  }
+
+  :not(pre) > code {
+    background-color: var(--color-paper-shade);
+    padding: 0.1em 0.36em;
+    border-radius: 2px;
+    font-size: 0.9em;
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-[80rem] px-5 sm:px-8 lg:px-10;
+  }
+
+  .section-index {
+    @apply flex items-center gap-4 font-mono text-[11px] font-normal uppercase tracking-[0.22em] text-ink-mute;
+    text-wrap: normal;
+  }
+
+  .section-index::after {
+    content: '';
+    @apply h-px flex-1;
+    background-color: var(--color-rule);
+  }
+
+  .measure {
+    @apply max-w-[38rem];
+  }
+
+  .link-underline {
+    @apply text-ink underline decoration-rule decoration-1 underline-offset-[0.28em] transition-colors;
+  }
+
+  .link-underline:hover {
+    @apply text-accent decoration-accent;
+  }
+
+  .btn-solid,
+  .btn-line,
+  .btn-line-dark {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-[13.5px] font-medium tracking-wide transition-colors duration-150;
+  }
+
+  /* 官网式亮绿主按钮：深字高对比 */
+  .btn-solid {
+    background-color: var(--color-brand);
+    color: var(--color-night);
+  }
+
+  .btn-solid:hover {
+    background-color: #65e8a1;
+  }
+
+  .btn-line {
+    @apply border border-ink/25 text-ink hover:border-ink hover:bg-ink/5;
+  }
+
+  .btn-line-dark {
+    border: 1px solid var(--color-night-line);
+    color: #f2f4f1;
+    background-color: transparent;
+  }
+
+  .btn-line-dark:hover {
+    border-color: #6d756f;
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .mono-num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}

@@ -1,0 +1,134 @@
+---
+const modes = [
+  { id: 'prose', label: '纯文字' },
+  { id: 'wire', label: '低保真线框' },
+  { id: 'diagram', label: '关系图' },
+];
+---
+
+<section class="proof" data-tabs-scope aria-labelledby="proof-title">
+  <div class="head">
+    <div class="intro">
+      <h2 id="proof-title">同一份信息，换一种载体</h2>
+      <p>
+        三种形态讲的是同一件事：把结算页改版的评审材料交给设计、工程和 PM。切换看看，评审者能问出的问题完全不一样。
+      </p>
+    </div>
+
+    <div class="tabs" data-tablist role="tablist" aria-label="切换表达形态">
+      {
+        modes.map((mode, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`proof-tab-${mode.id}`}
+            data-tab={mode.id}
+            aria-controls={`proof-panel-${mode.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+          >
+            {mode.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="stage">
+    <div
+      class="panel prose"
+      role="tabpanel"
+      id="proof-panel-prose"
+      data-panel="prose"
+      aria-labelledby="proof-tab-prose"
+    >
+      <p>
+        结算页改版的评审材料包括金额校验文案、退款入口位置与灰度计划。设计由林岚负责，工程由周叙负责，PM
+        是陈可。评审稿需三人确认后定版，随后先灰度 10%，观察 24 小时再全量发布；生产发布前还必须确认回滚方案。
+        三人需要在同一处留下结论，否则容易各自保存不同版本的批注，最后无法判断哪一版是最终意见。灰度期间若金额校验
+        出现报错，则回到评审稿重新确认文案，不进入全量发布。
+      </p>
+      <p class="aside">读到这里，你还得自己在脑内还原：谁负责什么、谁先谁后、卡在哪里。</p>
+    </div>
+
+    <div
+      class="panel wire"
+      role="tabpanel"
+      id="proof-panel-wire"
+      data-panel="wire"
+      aria-labelledby="proof-tab-wire"
+      hidden
+    >
+      <div class="wf-grid">
+        <section>
+          <h3>发布清单</h3>
+          <ul><li>金额校验文案 · 待确认</li><li>退款入口位置 · 已通过</li></ul>
+        </section>
+        <section>
+          <h3>评审人</h3>
+          <ul><li>林岚 / 设计</li><li>周叙 / 工程</li><li>陈可 / PM</li></ul>
+        </section>
+        <section>
+          <h3>结论</h3>
+          <p>三人确认 → 灰度 10% → 24 小时后全量</p>
+        </section>
+      </div>
+      <p class="aside">层级和顺序直接可见，但状态变化还得靠想象。</p>
+    </div>
+
+    <div
+      class="panel rel"
+      role="tabpanel"
+      id="proof-panel-diagram"
+      data-panel="diagram"
+      aria-labelledby="proof-tab-diagram"
+      hidden
+    >
+      <svg viewBox="0 0 520 200" role="img" aria-label="评审稿经三位评审者确认后进入灰度，灰度通过再进入全量发布，任一环节未通过则回到评审稿">
+        <g fill="none" stroke="#17140f" stroke-opacity="0.3" stroke-width="1.5">
+          <rect x="16" y="76" width="96" height="48"></rect>
+          <path d="M112 100h40M152 100V44h40M152 100h40M152 100v56h40"></path>
+          <path d="M192 44h72M264 44v56M192 100h72M192 156h72M264 156v-56M264 100h48"></path>
+          <path d="M312 100h48M360 100h48M408 100h48"></path>
+          <path d="M456 100v56h-300v-28" stroke-dasharray="3 4"></path>
+        </g>
+        <rect x="456" y="78" width="56" height="44" fill="#b2331a"></rect>
+        <g font-family="system-ui, sans-serif" font-size="12" fill="#17140f">
+          <text x="196" y="38">设计</text><text x="196" y="94">工程</text><text x="196" y="150">PM</text>
+          <text x="316" y="94">灰度 10%</text><text x="412" y="94">全量</text>
+          <text x="30" y="105">评审稿</text>
+          <text x="360" y="176" font-size="10" fill="#726858">任一环节未通过 → 回到评审稿</text>
+        </g>
+        <text x="484" y="105" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#faf7f2">结论</text>
+      </svg>
+      <p class="aside">依赖与回路一眼可见；要验证流程能否点通，还得换原型。</p>
+    </div>
+  </div>
+
+  <p class="foot">主张不是「HTML 更漂亮」，而是结构、状态与关系可以直接被看见。</p>
+
+  <style>
+    .proof { min-width: 0; margin-top: 2rem; border: 1px solid var(--color-rule); background: var(--color-paper); font-family: var(--font-sans); }
+    .head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--color-rule); }
+    .intro { min-width: 0; flex: 1 1 320px; }
+    h2 { margin: 0; font-family: var(--font-serif); font-size: 19px; font-weight: 600; color: var(--color-ink); }
+    .intro p { margin: 6px 0 0; max-width: 38rem; font-size: 12.5px; line-height: 1.8; color: var(--color-ink-mute); }
+    .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tabs button { padding: 7px 12px; border: 1px solid var(--color-rule); background: transparent; font: 11px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    .tabs button[aria-selected='true'] { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-paper); }
+    .stage { min-width: 0; min-height: 232px; padding: 18px 20px; }
+    .panel { min-width: 0; }
+    .prose p { margin: 0; max-width: 42rem; font-size: 13px; line-height: 1.95; color: var(--color-ink-soft); }
+    .aside { margin: 14px 0 0 !important; padding-top: 10px; border-top: 1px dashed var(--color-rule); font-size: 11px !important; line-height: 1.7 !important; color: var(--color-ink-faint) !important; }
+    .wf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .wf-grid section { min-width: 0; border: 1px solid #bbb; padding: 10px; background: #fff; font-family: system-ui, sans-serif; }
+    .wf-grid h3 { margin: 0 0 8px; font: 12px system-ui, sans-serif; font-weight: 600; letter-spacing: 0; color: #222; }
+    .wf-grid ul { margin: 0; padding-left: 16px; font-size: 11px; line-height: 1.9; color: #444; }
+    .wf-grid p { margin: 0; font-size: 11px; line-height: 1.8; color: #444; }
+    .rel svg { display: block; width: 100%; height: auto; }
+    .foot { margin: 0; padding: 12px 20px; border-top: 1px solid var(--color-rule); background: var(--color-paper-deep); font-size: 12px; color: var(--color-ink-mute); }
+    @media (max-width: 640px) {
+      .wf-grid { grid-template-columns: 1fr; }
+      .stage { min-height: 0; }
+    }
+  </style>
+</section>

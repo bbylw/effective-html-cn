@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroArt from '../components/HeroArt.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { installMethods, repoUrl, skillCount } from '../data/skills';
+
+const description =
+  'Effective HTML：一组用于创建自包含 HTML 成果的智能体技能。阅读指南，或直接打开线框图、原型、示意图与计划等可交互成果。';
+
+const kinds = [
+  { n: '01', title: '线框图', text: '测试层级、内容、导航与响应式结构。', href: '/docs/wireframes/', hue: '#3b5bdb', shape: 'wire' },
+  { n: '02', title: '原型', text: '测试一条可信流程、它的行为和相关状态。', href: '/docs/prototypes/', hue: '#21a06b', shape: 'proto' },
+  { n: '03', title: '示意图', text: '让关系与系统行为更容易检查。', href: '/docs/diagrams/', hue: '#8b6cf0', shape: 'diagram' },
+  { n: '04', title: '计划', text: '让实施顺序清晰，且不丢源材料。', href: '/docs/plans/', hue: '#ee6aa8', shape: 'plan' },
+];
+
+const reasons = [
+  { title: '看见结构', text: '让布局、层级与响应式选择直接可见。' },
+  { title: '测试行为', text: '真正操作状态、反馈、恢复与产品边界。' },
+  { title: '直接交付', text: '给协作者一件可以检查、可以指方向的成果。' },
+];
+---
+
+<Layout title="Effective HTML — 给产品开发的可视上下文" {description} variant="dark">
+  <section class="hero">
+    <div class="shell grid gap-10 py-14 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-14 lg:py-24">
+      <div class="rise">
+        <p class="kicker">by Plannotator</p>
+        <h1 class="title">Effective<br />HTML</h1>
+        <p class="tagline">给产品开发的<br />可视上下文。</p>
+        <p class="intro">
+          一个展示智能体可创建的可视与交互 HTML 成果的参考站。读指南，或者直接打开成果，看它到底怎么工作。
+        </p>
+        <div class="cta">
+          <a href="/docs/" class="btn-solid">
+            阅读指南
+
+          </a>
+          <a href="/examples/" class="btn-line-dark">浏览成果目录</a>
+        </div>
+        <p class="meta">{skillCount} 个技能 · 自包含 HTML · 浏览器中验证</p>
+      </div>
+
+      <div class="rise art" style="animation-delay: 120ms">
+        <HeroArt />
+      </div>
+    </div>
+  </section>
+
+  <section class="shell py-16 sm:py-24">
+    <h2 class="heading">用 HTML 能做什么</h2>
+    <p class="lead">用 HTML 比较方案、解释系统、测试交互、规划实施。</p>
+
+    <div class="cards">
+      {
+        kinds.map((kind) => (
+          <a href={kind.href} class="card">
+            <span class="card-num">{kind.n}</span>
+            <div class="card-art">
+              <svg viewBox="0 0 160 80" aria-hidden="true">
+                {kind.shape === 'wire' && (
+                  <g fill="none" stroke={kind.hue} stroke-width="2">
+                    <rect x="10" y="8" width="140" height="64" />
+                    <path d="M10 22h140M52 22v50" />
+                    <rect x="64" y="32" width="30" height="14" fill={kind.hue} opacity="0.25" stroke="none" />
+                    <path d="M64 54h68M64 62h46" opacity="0.5" />
+                  </g>
+                )}
+                {kind.shape === 'proto' && (
+                  <g>
+                    <rect x="10" y="10" width="86" height="20" rx="10" fill="none" stroke={kind.hue} stroke-width="2" />
+                    <circle cx="82" cy="20" r="6" fill={kind.hue} />
+                    <rect x="10" y="42" width="60" height="24" fill={kind.hue} opacity="0.25" />
+                    <path d="M104 52h40" stroke={kind.hue} stroke-width="2" />
+                    <path d="M138 46l6 6-6 6" fill="none" stroke={kind.hue} stroke-width="2" />
+                  </g>
+                )}
+                {kind.shape === 'diagram' && (
+                  <g fill="none" stroke={kind.hue} stroke-width="2">
+                    <rect x="10" y="28" width="34" height="24" />
+                    <rect x="108" y="10" width="34" height="24" />
+                    <rect x="108" y="48" width="34" height="24" />
+                    <path d="M44 40h32v-18h32M76 40v20h32" />
+                    <circle cx="76" cy="40" r="4" fill={kind.hue} stroke="none" />
+                  </g>
+                )}
+                {kind.shape === 'plan' && (
+                  <g>
+                    <path d="M14 22h132M14 40h132M14 58h132" stroke={kind.hue} stroke-width="2" opacity="0.35" />
+                    <rect x="14" y="16" width="46" height="12" fill={kind.hue} opacity="0.7" />
+                    <rect x="52" y="34" width="58" height="12" fill={kind.hue} opacity="0.5" />
+                    <rect x="104" y="52" width="42" height="12" fill={kind.hue} opacity="0.35" />
+                  </g>
+                )}
+              </svg>
+            </div>
+            <h3>{kind.title}</h3>
+            <p>{kind.text}</p>
+            <span class="card-link">查看指南</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="shell py-16 sm:py-24">
+      <h2 class="heading">要理解的东西很多时，就用 HTML</h2>
+      <p class="lead">
+        Markdown 往往够用。需要比较设计、切换状态、跟着流程走一遍，或者亲手试一试时，HTML 更合适。
+      </p>
+
+      <div class="reasons">
+        {
+          reasons.map((reason, i) => (
+            <div class="reason">
+              <span class="reason-num">0{i + 1}</span>
+              <h3>{reason.title}</h3>
+              <p>{reason.text}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <a href="/docs/why-html/" class="why-link">为什么用 HTML？</a>
+    </div>
+  </section>
+
+  <section id="install" class="shell py-16 sm:py-20">
+    <h2 class="heading">把技能装进你的智能体</h2>
+    <p class="lead">希望智能体把这些参考资料当作可复用工作流时，安装整个技能集。</p>
+
+    <div class="install">
+      <CodeBlock lines={installMethods[0].lines} label="终端" />
+      <div class="install-note">
+        <p>也可以只装其中一个，或用 Claude Code、Codex 插件市场安装。指南里收录了三种环境的完整命令。</p>
+        <div class="install-actions">
+          <a href="/docs/#install" class="btn-line">查看完整安装说明</a>
+          <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="btn-line">
+            GitHub<span class="sr-only">（在新窗口打开）</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .hero { background-color: var(--color-night); border-bottom: 1px solid var(--color-night-line); color: #f7f8f5; }
+    .kicker { margin: 0 0 1.5rem; font: 11px var(--font-mono); text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-brand); }
+    .title { margin: 0; font-size: clamp(3.6rem, 9vw, 7.4rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.055em; }
+    .tagline { margin: 1.5rem 0 0; font-family: var(--font-serif); font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 600; line-height: 1.35; }
+    .intro { margin: 1.4rem 0 0; max-width: 30rem; font-size: 14px; line-height: 1.9; color: #aab4ac; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2rem; }
+    .meta { margin: 1.8rem 0 0; font: 11px var(--font-mono); letter-spacing: 0.06em; color: #7e8881; }
+    .art { min-width: 0; }
+    .heading { margin: 0; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-weight: 700; letter-spacing: -0.03em; color: var(--color-ink); }
+    .lead { margin: 0.9rem 0 0; max-width: 36rem; font-size: 15px; line-height: 1.9; color: var(--color-ink-mute); }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 2.5rem; }
+    .card { display: flex; flex-direction: column; min-width: 0; padding: 18px; border: 1px solid var(--color-rule); background: #fff; color: var(--color-ink); transition: border-color 0.18s, transform 0.18s; }
+    .card:hover { border-color: var(--color-brand); transform: translateY(-3px); }
+    .card-num { font: 10px var(--font-mono); letter-spacing: 0.16em; color: var(--color-ink-faint); }
+    .card-art { height: 80px; margin: 12px 0 14px; display: flex; align-items: center; }
+    .card-art svg { width: 100%; height: 80px; }
+    .card h3 { margin: 0; font-size: 16px; font-weight: 700; }
+    .card p { margin: 6px 0 0; font-size: 12.5px; line-height: 1.75; color: var(--color-ink-mute); }
+    .card-link { margin-top: auto; padding-top: 16px; font: 11px var(--font-mono); color: var(--color-accent); }
+    .why { border-top: 1px solid var(--color-rule); background-color: var(--color-paper-deep); }
+    .reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 2.5rem; }
+    .reason { border-top: 2px solid var(--color-ink); padding-top: 14px; }
+    .reason-num { font: 10px var(--font-mono); color: var(--color-accent); }
+    .reason h3 { margin: 6px 0 0; font-size: 16px; font-weight: 700; }
+    .reason p { margin: 6px 0 0; font-size: 13px; line-height: 1.8; color: var(--color-ink-mute); }
+    .why-link { display: inline-block; margin-top: 2.2rem; font: 12px var(--font-mono); color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
+    .install { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 24px; align-items: center; margin-top: 2.2rem; }
+    .install-note { min-width: 0; }
+    .install-note p { margin: 0; font-size: 13px; line-height: 1.85; color: var(--color-ink-mute); }
+    .install-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.2rem; }
+    @media (max-width: 900px) {
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .install { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .cards { grid-template-columns: 1fr; }
+      .reasons { grid-template-columns: 1fr; }
+      .art { max-width: 420px; margin: 0 auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .card:hover { transform: none; }
+    }
+  </style>
+</Layout>

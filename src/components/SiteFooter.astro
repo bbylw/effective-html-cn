@@ -1,0 +1,86 @@
+---
+import { repoUrl } from '../data/skills';
+
+const year = new Date().getFullYear();
+
+const siteLinks = [
+  { href: '/', label: '首页' },
+  { href: '/docs/', label: '指南' },
+  { href: '/examples/', label: '成果目录' },
+  { href: '/docs/#install', label: '安装技能集' },
+];
+
+const externalLinks = [
+  { href: repoUrl, label: 'GitHub 仓库' },
+  { href: 'https://www.effectivehtml.com/', label: '英文官网' },
+  { href: 'https://plannotator.ai', label: 'Plannotator' },
+  { href: 'https://thariqs.github.io/html-effectiveness', label: '灵感来源' },
+];
+---
+
+<footer class="border-t border-night-line bg-night text-[#c9d3cb]">
+  <div class="shell py-14">
+    <div class="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr]">
+      <div>
+        <div class="flex items-center gap-3">
+          <img
+            src="/favicon.svg"
+            width="28"
+            height="28"
+            alt=""
+            aria-hidden="true"
+            class="h-7 w-7 shrink-0 rounded-[5px] ring-1 ring-white/15"
+          />
+          <span class="text-[15px] font-semibold text-paper">Effective HTML</span>
+        </div>
+        <p class="measure mt-4 text-[13px] leading-[1.85] text-[#9aa39d]">
+          一组用于创建实用、自包含 HTML 成果的专用智能体技能。本站以落地页、指南与可打开的成果示例呈现它们。
+        </p>
+      </div>
+
+      <nav aria-label="站点导航">
+        <h2 class="font-mono text-[10.5px] uppercase tracking-[0.2em] text-[#7e8881]">站点</h2>
+        <ul class="mt-4 space-y-2.5 text-[13px]">
+          {
+            siteLinks.map((item) => (
+              <li>
+                <a href={item.href} class="transition-colors hover:text-brand">{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav aria-label="相关资源">
+        <h2 class="font-mono text-[10.5px] uppercase tracking-[0.2em] text-[#7e8881]">相关</h2>
+        <ul class="mt-4 space-y-2.5 text-[13px]">
+          {
+            externalLinks.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="transition-colors hover:text-brand"
+                >
+                  {item.label}<span class="sr-only">（在新窗口打开）</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col gap-3 border-t border-night-line pt-6 text-[11.5px] text-[#7e8881] sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} · 内容编译自
+        <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="underline underline-offset-4"
+          >plannotator/effective-html<span class="sr-only">（在新窗口打开）</span></a
+        > 与官方指南。
+      </p>
+      <p class="font-mono uppercase tracking-[0.16em]">Astro · TypeScript · Tailwind</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,60 @@
+<div class="proto" data-prototype-scope>
+  <p class="scenario">场景：把「结算页改版」发到审批，评审问题是状态与恢复，不是视觉。</p>
+
+  <form data-prototype>
+    <div class="field">
+      <label for="release-env">发布环境</label>
+      <select id="release-env" name="env">
+        <option value="">请选择</option>
+        <option value="staging">预发</option>
+        <option value="production">生产</option>
+      </select>
+    </div>
+
+    <label class="check">
+      <input type="checkbox" name="rollback" />
+      <span>已确认回滚方案</span>
+    </label>
+
+    <button type="submit" disabled>发起审批</button>
+  </form>
+
+  <p class="status" data-prototype-status role="status" aria-live="polite" data-state="empty">
+    尚未选择发布环境。
+  </p>
+
+  <div class="result" data-prototype-result hidden>
+    <strong>审批已提交</strong>
+    <span data-prototype-number></span>
+    <span>下一步由真实系统接管，此处刻意留白。</span>
+  </div>
+
+  <button class="reset" type="button" data-prototype-reset>重置演示</button>
+
+  <style>
+    .proto { min-width: 0; font-family: var(--font-sans); }
+    .scenario { margin: 0 0 12px; font-size: 12px; line-height: 1.7; color: var(--color-ink-mute); }
+    form { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; padding: 12px; border: 1px solid var(--color-rule); background: #fffdf9; }
+    .field { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 11px; color: var(--color-ink-mute); }
+    select { padding: 6px 8px; border: 1px solid var(--color-rule); background: #fff; font: 12px var(--font-sans); color: var(--color-ink); }
+    .check { display: inline-flex; align-items: center; gap: 6px; padding-bottom: 7px; }
+    form button[type='submit'] { padding: 7px 14px; border: 1px solid var(--color-ink); background: var(--color-ink); color: var(--color-paper); font: 12px var(--font-sans); cursor: pointer; }
+    form button[type='submit']:disabled { border-color: var(--color-rule); background: var(--color-paper-shade); color: var(--color-ink-faint); cursor: not-allowed; }
+    .status { margin: 10px 0 0; padding: 9px 12px; border: 1px solid var(--color-rule); border-left: 3px solid var(--color-ink-faint); background: var(--color-paper-deep); font-size: 12px; line-height: 1.6; color: var(--color-ink-soft); }
+    .status[data-state='loading'] { border-left-style: dashed; }
+    .status[data-state='success'] { border-left-color: #3b6d11; }
+    .status[data-state='error'] { border-left-color: var(--color-accent); }
+    .status[data-state='success']::before { content: '✓ '; }
+    .status[data-state='error']::before { content: '! '; }
+    .status[data-state='loading']::before { content: '… '; }
+    .result { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; margin-top: 10px; padding: 10px 12px; border: 1px solid var(--color-rule); font-size: 12px; color: var(--color-ink-soft); }
+    .result strong { color: var(--color-ink); }
+    .result span { font-family: var(--font-mono); }
+    .reset { margin-top: 10px; padding: 5px 10px; border: 1px solid var(--color-rule); background: transparent; font: 11px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    @media (max-width: 560px) {
+      form { flex-direction: column; align-items: stretch; }
+      .check { padding-bottom: 0; }
+    }
+  </style>
+</div>

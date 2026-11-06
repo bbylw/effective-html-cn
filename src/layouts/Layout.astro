@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** 404 等不希望被索引的页面 */
+  noindex?: boolean;
+  /** 深色落地页与浅色内页使用不同的页头 */
+  variant?: 'dark' | 'light';
+}
+
+const { title, description, noindex = false, variant = 'light' } = Astro.props;
+
+// 未配置 SITE_URL 时 Astro 可能回退到 localhost；这类地址不能写进 canonical。
+const publicSite =
+  Astro.site && !['localhost', '127.0.0.1', '[::1]'].includes(Astro.site.hostname)
+    ? Astro.site
+    : null;
+const canonical = publicSite && !noindex ? new URL(Astro.url.pathname, publicSite) : null;
+const ogImage = publicSite ? new URL('/og.png', publicSite) : null;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#faf7f2" />
+    {canonical && <link rel="canonical" href={canonical.href} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="Effective HTML" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical.href} />}
+    {ogImage && <meta property="og:image" content={ogImage.href} />}
+    {ogImage && <meta property="og:image:width" content="1200" />}
+    {ogImage && <meta property="og:image:height" content="630" />}
+    {ogImage && <meta property="og:image:alt" content="Effective HTML：八件可操作的 HTML 成果" />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-[13px] focus:text-paper"
+    >
+      跳到主要内容
+    </a>
+
+    <div class="relative z-10 flex min-h-dvh flex-col">
+      <SiteHeader variant={variant} />
+      <main id="main" class="flex-1">
+        <slot />
+      </main>
+      <SiteFooter />
+    </div>
+
+    <script>
+      import '../scripts/interactions';
+    </script>
+  </body>
+</html>

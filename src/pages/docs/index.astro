@@ -1,0 +1,9 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getDoc } from '../../data/docs';
+
+const doc = getDoc('guide');
+if (!doc) throw new Error('缺少指南首页数据');
+---
+
+<DocsLayout doc={doc} />

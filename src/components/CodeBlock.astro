@@ -1,0 +1,81 @@
+---
+interface Props {
+  lines: string[];
+  /** 左上角标签，例如「终端」或文件名 */
+  label?: string;
+  /** 是否显示复制按钮 */
+  copyable?: boolean;
+}
+
+const { lines, label = '终端', copyable = true } = Astro.props;
+---
+
+<figure class="group relative min-w-0 border-l-2 border-accent bg-paper-deep">
+  <div class="flex items-center justify-between gap-4 border-b border-rule-soft px-4 py-2">
+    <figcaption class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-faint">
+      {label}
+    </figcaption>
+
+    {
+      copyable && (
+        <button
+          type="button"
+          data-copy
+          aria-label={`复制${label}代码块`}
+          class="-mr-1 flex items-center gap-1.5 px-2 py-1 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-mute transition-colors hover:text-accent"
+        >
+          <svg
+            data-copy-icon
+            width="11"
+            height="11"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            aria-hidden="true"
+          >
+            <rect x="5.5" y="5.5" width="8" height="8" rx="1" />
+            <path d="M10.5 5.5V3.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2" />
+          </svg>
+          <span data-copy-label role="status" aria-live="polite">复制</span>
+        </button>
+      )
+    }
+  </div>
+
+  <pre class="min-w-0 overflow-x-auto px-4 py-3.5 text-[12.5px] leading-[1.7] text-ink-soft"><code>{lines.map((line) => <span class="block whitespace-pre">{line}</span>)}</code></pre>
+</figure>
+
+<script>
+  // 组件脚本由 Astro 打包后每页只注入一次，统一为所有代码块绑定事件。
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const labelEl = btn.querySelector<HTMLElement>('[data-copy-label]');
+      const code = btn.closest('figure')?.querySelector('code');
+      if (!labelEl || !code) return;
+
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(code.innerText);
+        copied = true;
+      } catch {
+        // 非安全上下文或权限被拒时，选中代码内容供手动复制。
+        const range = document.createRange();
+        range.selectNodeContents(code);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+      }
+
+      labelEl.textContent = copied ? '已复制' : '已选中';
+      btn.classList.toggle('text-accent', copied);
+
+      window.clearTimeout(Number(btn.dataset.timer ?? 0));
+      const timer = window.setTimeout(() => {
+        labelEl.textContent = '复制';
+        btn.classList.remove('text-accent');
+      }, 1800);
+      btn.dataset.timer = String(timer);
+    });
+  });
+</script>

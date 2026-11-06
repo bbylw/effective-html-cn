@@ -1,0 +1,106 @@
+---
+import { repoUrl } from '../data/skills';
+
+interface Props {
+  variant?: 'dark' | 'light';
+}
+
+const { variant = 'light' } = Astro.props;
+const dark = variant === 'dark';
+
+const nav = [
+  { href: '/examples/', label: '成果目录' },
+  { href: '/docs/', label: '指南' },
+];
+---
+
+<header
+  id="masthead"
+  data-variant={variant}
+  class:list={[
+    'sticky top-0 z-40 border-b transition-colors duration-300',
+    dark ? 'bg-night text-paper' : 'bg-paper/90 text-ink backdrop-blur-md',
+  ]}
+>
+  <div class="shell flex h-16 items-center justify-between gap-6">
+    <a href="/" class="group flex items-center gap-3" aria-label="Effective HTML 首页">
+      <img
+        src="/favicon.svg"
+        width="28"
+        height="28"
+        alt=""
+        aria-hidden="true"
+        class="h-7 w-7 shrink-0 rounded-[5px] ring-1 ring-white/15"
+      />
+      <span class="text-[15px] font-semibold leading-none tracking-tight">Effective HTML</span>
+    </a>
+
+    <nav aria-label="主导航" class="hidden items-center gap-8 md:flex">
+      {
+        nav.map((item) => (
+          <a href={item.href} class="text-[13.5px] opacity-80 transition-opacity hover:opacity-100">
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href={repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-[13.5px] opacity-80 transition-opacity hover:opacity-100"
+      >
+        GitHub<span class="sr-only">（在新窗口打开）</span>
+      </a>
+    </nav>
+
+    <a
+      href={repoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="shrink-0 border px-3 py-1.5 text-[12.5px] md:hidden"
+      style={dark ? 'border-color:#2b302d' : 'border-color:#dcdad3'}
+    >
+      GitHub<span class="sr-only">（在新窗口打开）</span>
+    </a>
+  </div>
+
+  <div
+    class="md:hidden"
+    style={dark ? 'border-top:1px solid #2b302d' : 'border-top:1px solid #eceae4'}
+  >
+    <nav aria-label="章节导航" class="shell">
+      <ul class="scrollbar-none flex gap-7 overflow-x-auto py-3">
+        {
+          nav.map((item) => (
+            <li class="shrink-0">
+              <a href={item.href} class="font-mono text-[11px] uppercase tracking-[0.14em] opacity-75">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom-color: transparent;
+  }
+  header.is-scrolled {
+    border-bottom-color: var(--color-rule);
+  }
+  header[data-variant='dark'].is-scrolled {
+    border-bottom-color: var(--color-night-line);
+  }
+</style>
+
+<script>
+  const masthead = document.getElementById('masthead');
+  if (masthead) {
+    const onScroll = () => masthead.classList.toggle('is-scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

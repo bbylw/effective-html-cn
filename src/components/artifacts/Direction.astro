@@ -1,0 +1,105 @@
+---
+const themes = [
+  {
+    id: 'light',
+    label: '浅色',
+    bg: '#faf7f2',
+    fg: '#17140f',
+    muted: '#685f51',
+    colors: [
+      { name: '纸', value: '#faf7f2' },
+      { name: '墨', value: '#17140f' },
+      { name: '朱', value: '#b2331a' },
+      { name: '线', value: '#ded4c4' },
+    ],
+    note: '组件只消费变量，不在媒体查询里改样式。',
+  },
+  {
+    id: 'dark',
+    label: '深色',
+    bg: '#17140f',
+    fg: '#faf7f2',
+    muted: '#b6ab98',
+    colors: [
+      { name: '底', value: '#17140f' },
+      { name: '字', value: '#faf7f2' },
+      { name: '朱', value: '#e2705a' },
+      { name: '线', value: '#3b352c' },
+    ],
+    note: '暗色不是机械反色：朱红提亮以保住对比，线色单独调过。',
+  },
+];
+---
+
+<div class="direction" data-tabs-scope>
+  <div class="tabs" data-tablist role="tablist" aria-label="切换成果的明暗主题">
+    {
+      themes.map((theme, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`theme-tab-${theme.id}`}
+          data-tab={theme.id}
+          aria-controls={`theme-panel-${theme.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+        >
+          {theme.label}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    themes.map((theme, i) => (
+      <div
+        class="sheet"
+        role="tabpanel"
+        id={`theme-panel-${theme.id}`}
+        data-panel={theme.id}
+        aria-labelledby={`theme-tab-${theme.id}`}
+        hidden={i > 0}
+        style={`--sheet-bg:${theme.bg};--sheet-fg:${theme.fg};--sheet-muted:${theme.muted}`}
+      >
+        <p class="label">先写设计计划，再写页面</p>
+        <div class="swatches">
+          {theme.colors.map((color) => (
+            <div class="swatch">
+              <span class="chip" style={`background:${color.value}`} />
+              <span class="name">{color.name}</span>
+              <span class="hex">{color.value}</span>
+            </div>
+          ))}
+        </div>
+        <dl class="roles">
+          <div><dt>展示字</dt><dd>衬线 / 宋体</dd></div>
+          <div><dt>正文字</dt><dd>系统无衬线</dd></div>
+          <div><dt>布局</dt><dd>一条竖向评审动线；宽内容独立滚动</dd></div>
+        </dl>
+        <p class="note">{theme.note}</p>
+      </div>
+    ))
+  }
+
+  <style>
+    .direction { min-width: 0; font-family: var(--font-sans); }
+    .tabs { display: flex; gap: 6px; }
+    .tabs button { padding: 6px 14px; border: 1px solid var(--color-rule); background: transparent; font: 12px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    .tabs button[aria-selected='true'] { border-color: var(--color-accent); color: var(--color-accent); }
+    .sheet { min-width: 0; margin-top: 10px; padding: 16px 18px; background: var(--sheet-bg); color: var(--sheet-fg); border: 1px solid var(--color-rule); }
+    .label { margin: 0; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--sheet-muted); }
+    .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .swatch { min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--sheet-muted); }
+    .chip { display: block; height: 34px; border: 1px solid rgba(128, 128, 128, 0.35); }
+    .name { color: var(--sheet-fg); }
+    .hex { font-family: var(--font-mono); }
+    .roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 16px 0 0; padding-top: 12px; border-top: 1px solid rgba(128, 128, 128, 0.35); }
+    .roles div { min-width: 0; }
+    dt { font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--sheet-muted); }
+    dd { margin: 4px 0 0; font-size: 12px; line-height: 1.6; color: var(--sheet-fg); }
+    .note { margin: 12px 0 0; font-size: 11px; line-height: 1.7; color: var(--sheet-muted); }
+    @media (max-width: 560px) {
+      .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .roles { grid-template-columns: 1fr; }
+    }
+  </style>
+</div>

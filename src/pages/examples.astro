@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArtifactGallery from '../components/ArtifactGallery.astro';
+import { buildContracts, skillCount } from '../data/skills';
+
+const description =
+  '八件可直接打开、可键盘操作的 HTML 成果：请求路由、大图小字、一页纸、设计计划、低保真线框、可跑原型、发布计划与关系图。';
+---
+
+<Layout title="成果目录 · Effective HTML" {description}>
+  <section class="head">
+    <div class="shell py-14 sm:py-16">
+      <p class="eyebrow">Catalog / 成果目录</p>
+      <h1>打开成果，而不是看截图</h1>
+      <p class="lead">
+        {skillCount} 个技能，{skillCount} 件成果。左边选技能，右边是它真正会交付的东西：方向切换、模型切换、
+        审批状态都是可用的。宽窄屏都能打开，源码结构也可以就地查看。
+      </p>
+      <div class="actions">
+        <a href="/docs/" class="btn-line">返回指南</a>
+        <a href="/" class="btn-line">首页</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell pb-16">
+    <ArtifactGallery />
+    <p class="hint">提示：从指南点进来的链接会自动打开对应技能；也可以直接用键盘方向键切换。</p>
+  </section>
+
+  <section class="shell pb-20">
+    <h2 class="section-index"><span>01</span><span>共同的构建契约</span></h2>
+    <p class="lead contract-lead">
+      下面这些不是设计建议，而是上游八份 SKILL.md 里反复出现的要求。技能交付的成果应当满足它们。
+    </p>
+    <ul class="contracts">
+      {
+        buildContracts.map((item, i) => (
+          <li>
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{item.label}</h3>
+              <p>{item.detail}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="disclaimer">
+      本站是介绍站，不是技能产物本身：它由 Astro 构建，因此「单个自包含 HTML 文件」约束的是成果，而不是这一页。
+    </p>
+  </section>
+
+  <style>
+    .head { border-bottom: 1px solid var(--color-rule); background-color: var(--color-paper-deep); }
+    .eyebrow { margin: 0; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; color: var(--color-accent); }
+    h1 { margin: 0.8rem 0 0; font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.035em; }
+    .lead { margin: 1rem 0 0; max-width: 44rem; font-size: 14.5px; line-height: 1.9; color: var(--color-ink-mute); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.6rem; }
+    .hint { margin: 1rem 0 0; font-size: 12px; color: var(--color-ink-faint); }
+    .contract-lead { margin-top: 1.4rem; }
+    .contracts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 32px; margin: 2rem 0 0; padding: 0; list-style: none; }
+    .contracts li { display: flex; gap: 12px; min-width: 0; padding: 14px 0; border-top: 1px solid var(--color-rule); }
+    .num { flex: none; font: 10px var(--font-mono); color: var(--color-accent); }
+    .contracts h3 { margin: 0; font-size: 14px; font-weight: 700; }
+    .contracts p { margin: 4px 0 0; font-size: 12.5px; line-height: 1.8; color: var(--color-ink-mute); }
+    .disclaimer { margin: 1.6rem 0 0; font-size: 12.5px; line-height: 1.9; color: var(--color-ink-faint); }
+    @media (max-width: 700px) { .contracts { grid-template-columns: 1fr; } }
+  </style>
+</Layout>

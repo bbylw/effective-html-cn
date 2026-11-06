@@ -1,0 +1,50 @@
+<div class="plan">
+  <p class="source">源材料：结算页改版评审纪要（2026-10-28）· 措辞与顺序保持原样</p>
+
+  <div class="scroll">
+    <table>
+      <caption class="sr-only">发布阶段、负责人与依赖</caption>
+      <thead>
+        <tr><th scope="col">阶段</th><th scope="col">负责人</th><th scope="col">依赖</th><th scope="col">验收</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>评审稿定版</td><td>林岚（设计）</td><td>—</td><td>三人确认文案</td></tr>
+        <tr><td>灰度 10%</td><td>周叙（工程）</td><td>评审稿定版</td><td>金额校验零报错</td></tr>
+        <tr><td>全量发布</td><td>周叙（工程）</td><td>灰度 24 小时</td><td>回滚方案已确认</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="groups">
+    <section>
+      <h4>已定决策</h4>
+      <ul><li>退款入口保持在原位置</li><li>文案以评审稿为准</li></ul>
+    </section>
+    <section>
+      <h4>假设</h4>
+      <ul><li>灰度期间流量足够覆盖异常路径</li></ul>
+    </section>
+    <section>
+      <h4>待解问题</h4>
+      <ul><li>生产发布由谁点确认，尚未指定</li></ul>
+    </section>
+  </div>
+
+  <p class="note">没有进度百分比，也没有仪表盘摘要：源材料里没有这些，计划就不添加。</p>
+
+  <style>
+    .plan { min-width: 0; font-family: var(--font-sans); }
+    .source { margin: 0 0 10px; font: 11px var(--font-mono); color: var(--color-ink-faint); }
+    .scroll { min-width: 0; overflow-x: auto; border: 1px solid var(--color-rule); }
+    table { width: 100%; min-width: 420px; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 7px 9px; border-bottom: 1px solid var(--color-rule); text-align: left; color: var(--color-ink-soft); }
+    th { background: var(--color-paper-deep); font-weight: 500; color: var(--color-ink); }
+    tbody tr:last-child td { border-bottom: 0; }
+    .groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+    .groups section { min-width: 0; border-top: 2px solid var(--color-ink); padding-top: 8px; }
+    h4 { margin: 0 0 6px; font-family: var(--font-sans); font-size: 12px; font-weight: 600; letter-spacing: 0; color: var(--color-ink); }
+    ul { margin: 0; padding-left: 16px; font-size: 11px; line-height: 1.8; color: var(--color-ink-soft); }
+    .note { margin: 12px 0 0; font-size: 11px; color: var(--color-ink-faint); }
+    @media (max-width: 560px) { .groups { grid-template-columns: 1fr; } }
+  </style>
+</div>

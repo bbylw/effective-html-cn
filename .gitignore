@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.astro/
+
+.env
+.env.local
+.env.*.local
+!.env.example
+
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# WorkBuddy 本地工具数据与发布标记
+.workbuddy/
+.workbuddy-ai/
+*.genie
