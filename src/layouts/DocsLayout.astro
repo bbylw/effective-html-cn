@@ -85,18 +85,22 @@ const next = index < docs.length - 1 ? docs[index + 1] : undefined;
           <p class="eyebrow">Effective HTML 指南 / {doc.group}</p>
           <h1>{doc.title}</h1>
           <p class="summary">{doc.summary}</p>
-          <button
-            type="button"
-            class="copy-btn"
-            data-copy-markdown
-            data-markdown={markdown}
-          >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-              <rect x="5.5" y="5.5" width="8" height="8" rx="1"></rect>
-              <path d="M10.5 5.5V3.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"></path>
-            </svg>
-            <span data-copy-status role="status" aria-live="polite">复制 Markdown</span>
-          </button>
+          <span class="copy-feedback copy-markdown" data-copy-feedback>
+            <button
+              type="button"
+              class="copy-btn"
+              data-copy-markdown
+              data-markdown={markdown}
+            >
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <rect x="5.5" y="5.5" width="8" height="8" rx="1"></rect>
+                <path d="M10.5 5.5V3.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"></path>
+              </svg>
+              <span>复制 Markdown</span>
+            </button>
+            {/* live region 放在按钮外，按钮子元素是呈现性的，读屏器不一定播报 */}
+            <span class="copy-tip" role="status" aria-live="polite" data-copy-status />
+          </span>
         </header>
 
         <div class="prose">
@@ -104,7 +108,7 @@ const next = index < docs.length - 1 ? docs[index + 1] : undefined;
 
           {
             doc.sections.map((section) => (
-              <section id={section.id} class="doc-section">
+              <section id={section.id} class="doc-section" tabindex="-1">
                 <h2>{section.title}</h2>
                 {section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
                 {section.bullets && (
@@ -193,7 +197,7 @@ const next = index < docs.length - 1 ? docs[index + 1] : undefined;
 
       <aside class="toc" data-toc aria-label="本页目录">
         <p>本页内容</p>
-        <ul>
+        <ul data-toc-list>
           {
             headings.map((heading) => (
               <li>
@@ -217,66 +221,74 @@ const next = index < docs.length - 1 ? docs[index + 1] : undefined;
     .nav-details > summary { display: none; }
     .nav-body { position: sticky; top: 4rem; max-height: calc(100vh - 4rem); overflow-y: auto; padding: 1.6rem 1.25rem 2rem; }
     .search { display: flex; align-items: center; gap: 6px; border: 1px solid var(--color-rule); background: #fff; padding: 5px 8px; }
-    .search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; font: 12px var(--font-sans); color: var(--color-ink); }
-    .search kbd { font: 10px var(--font-mono); color: var(--color-ink-faint); white-space: nowrap; }
+    /* 不清掉 outline：全局 :focus-visible 需要在这里继续可见。 */
+    .search input { min-width: 0; flex: 1; border: 0; background: transparent; font: 0.75rem var(--font-sans); color: var(--color-ink); }
+    .search:focus-within { border-color: var(--color-accent); }
+    .search kbd { font: 0.625rem var(--font-mono); color: var(--color-ink-faint); white-space: nowrap; }
     .nav-group { margin-top: 1.5rem; }
-    .nav-group h2 { margin: 0 0 6px; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-faint); }
+    .nav-group h2 { margin: 0 0 6px; font: 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-faint); }
     .nav-group ul { margin: 0; padding: 0; list-style: none; }
     .nav-group li { min-width: 0; }
-    .nav-group a { display: block; padding: 5px 8px; border-radius: 4px; font-size: 12.5px; line-height: 1.5; color: var(--color-ink-soft); }
+    .nav-group a { display: block; padding: 5px 8px; border-radius: 4px; font-size: 0.78125rem; line-height: 1.5; color: var(--color-ink-soft); }
     .nav-group a:hover { background-color: rgba(20, 110, 69, 0.07); color: var(--color-accent); }
     .nav-group a[aria-current='page'] { background-color: #e2e0d8; color: var(--color-ink); font-weight: 600; }
-    .sidebar-foot { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 1.8rem; padding-top: 1rem; border-top: 1px solid var(--color-rule); font: 11px var(--font-mono); color: var(--color-ink-mute); }
+    .sidebar-foot { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 1.8rem; padding-top: 1rem; border-top: 1px solid var(--color-rule); font: 0.6875rem var(--font-mono); color: var(--color-ink-mute); }
     .docs-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 190px); gap: 3rem; min-width: 0; padding: 2.5rem 3rem 5rem; }
     .doc { min-width: 0; max-width: 46rem; }
-    .eyebrow { margin: 0; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-faint); }
+    .eyebrow { margin: 0; font: 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-faint); }
     .doc-head h1 { margin: 0.7rem 0 0; font-size: clamp(1.8rem, 3vw, 2.3rem); font-weight: 700; letter-spacing: -0.03em; }
-    .summary { margin: 0.8rem 0 0; font-size: 15px; line-height: 1.8; color: var(--color-ink-mute); }
-    .copy-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; padding: 6px 12px; border: 1px solid var(--color-rule); background: #fff; font: 11px var(--font-mono); color: var(--color-ink-soft); cursor: pointer; }
+    .summary { margin: 0.8rem 0 0; font-size: 0.9375rem; line-height: 1.8; color: var(--color-ink-mute); }
+    .copy-markdown { margin-top: 1.2rem; }
+    .copy-btn { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 1px solid var(--color-rule); background: #fff; font: 0.6875rem var(--font-mono); color: var(--color-ink-soft); cursor: pointer; }
     .copy-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
     .prose { margin-top: 2rem; }
-    .prose > p { margin: 0 0 1.1rem; font-size: 14.5px; line-height: 1.95; color: var(--color-ink-soft); }
+    .prose > p { margin: 0 0 1.1rem; font-size: 0.90625rem; line-height: 1.95; color: var(--color-ink-soft); }
     .doc-section { padding-top: 1.6rem; margin-top: 1.6rem; border-top: 1px solid var(--color-rule-soft); scroll-margin-top: 6rem; }
-    .doc-section h2 { margin: 0 0 1rem; font-size: 19px; font-weight: 700; }
-    .doc-section p { margin: 0 0 1rem; font-size: 14.5px; line-height: 1.95; color: var(--color-ink-soft); }
+    .doc-section h2 { margin: 0 0 1rem; font-size: 1.1875rem; font-weight: 700; }
+    .doc-section p { margin: 0 0 1rem; font-size: 0.90625rem; line-height: 1.95; color: var(--color-ink-soft); }
     .doc-section ul { margin: 0 0 1rem; padding-left: 1.2rem; }
-    .doc-section li { margin-bottom: 0.5rem; font-size: 14px; line-height: 1.85; color: var(--color-ink-soft); }
+    .doc-section li { margin-bottom: 0.5rem; font-size: 0.875rem; line-height: 1.85; color: var(--color-ink-soft); }
     .callout { margin: 1.2rem 0; padding: 12px 16px; border-left: 3px solid var(--color-brand); background: var(--color-paper-deep); }
-    .callout strong { font-size: 12px; color: var(--color-accent); }
-    .callout p { margin: 4px 0 0; font-size: 13px; line-height: 1.8; color: var(--color-ink-soft); }
+    .callout strong { font-size: 0.75rem; color: var(--color-accent); }
+    .callout p { margin: 4px 0 0; font-size: 0.8125rem; line-height: 1.8; color: var(--color-ink-soft); }
     .sources { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; margin: 1rem 0 0; }
     .sources a { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 10px 0; border-top: 1px solid var(--color-rule); }
-    .source-title { font-size: 13px; color: var(--color-accent); }
-    .source-note { font-size: 11px; color: var(--color-ink-faint); }
+    .source-title { font-size: 0.8125rem; color: var(--color-accent); }
+    .source-note { font-size: 0.6875rem; color: var(--color-ink-faint); }
     .install-blocks { display: grid; gap: 1.4rem; }
     .install-block { min-width: 0; }
-    .install-block h3 { margin: 0 0 4px; font-size: 14px; font-weight: 700; }
-    .install-block p { margin: 0 0 8px; font-size: 12.5px; color: var(--color-ink-mute); }
+    .install-block h3 { margin: 0 0 4px; font-size: 0.875rem; font-weight: 700; }
+    .install-block p { margin: 0 0 8px; font-size: 0.78125rem; color: var(--color-ink-mute); }
     .example { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 2.4rem; padding: 16px 18px; border: 1px solid var(--color-rule); background: var(--color-paper-deep); }
-    .example strong { font-size: 14px; }
-    .example p { margin: 4px 0 0; font-size: 12.5px; color: var(--color-ink-mute); }
-    .example a { font: 12px var(--font-mono); color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
-    .skill-link { margin-top: 1.4rem; font-size: 12.5px; color: var(--color-ink-mute); }
+    .example strong { font-size: 0.875rem; }
+    .example p { margin: 4px 0 0; font-size: 0.78125rem; color: var(--color-ink-mute); }
+    .example a { font: 0.75rem var(--font-mono); color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
+    .skill-link { margin-top: 1.4rem; font-size: 0.78125rem; color: var(--color-ink-mute); }
     .skill-link a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
     .pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--color-rule); }
-    .pager a { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 13px; }
-    .pager a span { font: 10px var(--font-mono); color: var(--color-ink-faint); }
+    .pager a { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 0.8125rem; }
+    .pager a span { font: 0.625rem var(--font-mono); color: var(--color-ink-faint); }
     .pager a strong { color: var(--color-accent); font-weight: 600; }
     .pager-next { text-align: right; }
-    .toc { position: sticky; top: 6rem; align-self: start; font-size: 12px; }
-    .toc > p { margin: 0 0 8px; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-ink-faint); }
-    .toc ul { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--color-rule); }
+    .toc { position: sticky; top: 6rem; align-self: start; font-size: 0.75rem; }
+    .toc > p { margin: 0 0 8px; font: 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-ink-faint); }
+    /* 原生 scroll-target-group 负责视觉态；脚本镜像到 aria-current 与 .target-current。 */
+    .toc ul { scroll-target-group: auto; margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--color-rule); }
     .toc a { display: block; padding: 4px 0 4px 10px; margin-left: -1px; border-left: 2px solid transparent; color: var(--color-ink-mute); }
     .toc a:hover { color: var(--color-accent); }
-    .toc a[data-active='true'] { border-left-color: var(--color-brand); color: var(--color-accent); }
-    @media (max-width: 1100px) {
+    /* :is() 是宽容选择器列表：不认识 :target-current 的浏览器仍匹配 .target-current。 */
+    .toc a:is(:target-current, .target-current) { border-left-color: var(--color-brand); color: var(--color-accent); }
+    @media (forced-colors: active) {
+      .toc a:is(:target-current, .target-current) { border-left-color: Highlight; }
+    }
+    @media (max-width: 68.75em) {
       .docs-main { grid-template-columns: minmax(0, 1fr); }
       .toc { display: none; }
     }
-    @media (max-width: 860px) {
+    @media (max-width: 53.75em) {
       .docs-shell { grid-template-columns: 1fr; }
       .sidebar { border-right: 0; border-bottom: 1px solid var(--color-rule); }
-      .nav-details > summary { display: block; padding: 12px 20px; font: 12px var(--font-mono); cursor: pointer; }
+      .nav-details > summary { display: block; padding: 12px 20px; font: 0.75rem var(--font-mono); cursor: pointer; }
       .nav-body { position: static; max-height: none; padding: 0 20px 1.4rem; }
       .docs-main { padding: 2rem 20px 4rem; }
       .sources { grid-template-columns: 1fr; }

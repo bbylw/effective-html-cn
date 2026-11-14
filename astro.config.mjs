@@ -20,6 +20,11 @@ export default defineConfig({
     : [],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // lightningcss 尚未收录 :target-current，会对合法选择器误报「未知伪类」；
+      // esbuild 的 CSS 压缩器按原样保留它。
+      cssMinify: 'esbuild',
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

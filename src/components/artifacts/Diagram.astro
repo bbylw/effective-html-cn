@@ -5,7 +5,6 @@
       role="tab"
       id="dg-tab-topology"
       data-tab="topology"
-      aria-controls="dg-panel-topology"
       aria-selected="true"
     >拓扑 · 谁依赖谁</button>
     <button
@@ -13,7 +12,6 @@
       role="tab"
       id="dg-tab-sequence"
       data-tab="sequence"
-      aria-controls="dg-panel-sequence"
       aria-selected="false"
     >时序 · 消息先后</button>
   </div>
@@ -25,6 +23,7 @@
     data-panel="topology"
     aria-labelledby="dg-tab-topology"
   >
+    <div class="sheet-surface">
     <p class="why">问题是连接关系：用 HTML + CSS 就够，不必因为是图就默认 SVG。</p>
     <div class="topo">
       <div class="node"><strong>提示词</strong><small>指向成果、仓库与文件夹</small></div>
@@ -37,6 +36,7 @@
       <span>同一份成果并行交给</span>
       <div class="chips"><span>设计</span><span>工程</span><span>PM</span></div>
     </div>
+    </div>
   </div>
 
   <div
@@ -45,8 +45,9 @@
     id="dg-panel-sequence"
     data-panel="sequence"
     aria-labelledby="dg-tab-sequence"
-    hidden
+    hidden="until-found"
   >
+    <div class="sheet-surface">
     <p class="why">问题是先后次序：改用 SVG 泳道，节点位置保持稳定，便于逐步对照。</p>
     <svg viewBox="0 0 480 190" role="img" aria-label="时序图：提示词发出请求，智能体返回成果，评审者在同一文件上批注，结论回到提示词">
       <g stroke="#ded4c4" stroke-width="1">
@@ -78,25 +79,28 @@
         <text x="160" y="136">结论回到同一处</text>
       </g>
     </svg>
+    </div>
   </div>
 
   <style>
     .dg { min-width: 0; font-family: var(--font-sans); }
-    .bar { display: flex; gap: 6px; flex-wrap: wrap; }
-    .bar button { padding: 6px 12px; border: 1px solid var(--color-rule); background: transparent; font: 11px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
-    .bar button[aria-selected='true'] { border-color: var(--color-accent); color: var(--color-accent); }
-    .sheet { min-width: 0; margin-top: 10px; padding: 14px; border: 1px solid var(--color-rule); background: #fffdf9; }
-    .why { margin: 0 0 12px; font-size: 11px; line-height: 1.7; color: var(--color-ink-mute); }
+    .bar { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; }
+    .bar button { position: relative; flex: 0 0 auto; padding: 6px 12px; border: 1px solid var(--color-rule); background: transparent; font: 0.6875rem var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    .bar button[aria-selected='true'] { color: var(--color-accent); }
+    .bar button[aria-selected='true']::after { content: ''; position: absolute; inset: auto 0 0; border-block-end: 2px solid var(--color-accent); }
+    .sheet { min-width: 0; }
+    .sheet-surface { min-width: 0; margin-top: 10px; padding: 14px; border: 1px solid var(--color-rule); background: #fffdf9; }
+    .why { margin: 0 0 12px; font-size: 0.6875rem; line-height: 1.7; color: var(--color-ink-mute); }
     .topo { display: flex; align-items: stretch; gap: 8px; flex-wrap: wrap; }
     .node { flex: 1 1 110px; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 10px; border: 1px solid var(--color-rule); background: var(--color-paper-deep); }
-    .node strong { font-size: 12px; color: var(--color-ink); }
-    .node small { font-size: 10px; line-height: 1.5; color: var(--color-ink-mute); }
-    .edge { align-self: center; font: 14px var(--font-mono); color: var(--color-accent); }
-    .fanout { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-rule); font-size: 11px; color: var(--color-ink-mute); }
+    .node strong { font-size: 0.75rem; color: var(--color-ink); }
+    .node small { font-size: 0.625rem; line-height: 1.5; color: var(--color-ink-mute); }
+    .edge { align-self: center; font: 0.875rem var(--font-mono); color: var(--color-accent); }
+    .fanout { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-rule); font-size: 0.6875rem; color: var(--color-ink-mute); }
     .chips { display: flex; gap: 6px; }
-    .chips span { padding: 3px 9px; border: 1px solid var(--color-rule); font-size: 11px; color: var(--color-ink-soft); }
+    .chips span { padding: 3px 9px; border: 1px solid var(--color-rule); font-size: 0.6875rem; color: var(--color-ink-soft); }
     svg { display: block; width: 100%; height: auto; }
-    @media (max-width: 560px) {
+    @media (max-width: 35em) {
       .topo { flex-direction: column; }
       .edge { transform: rotate(90deg); }
     }

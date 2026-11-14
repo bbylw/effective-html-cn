@@ -22,7 +22,6 @@ const directions = [
           role="tab"
           id={`wf-tab-${direction.id}`}
           data-tab={direction.id}
-          aria-controls={`wf-panel-${direction.id}`}
           aria-selected={i === 0 ? 'true' : 'false'}
         >
           {direction.label}
@@ -38,6 +37,7 @@ const directions = [
     data-panel="sidebar"
     aria-labelledby="wf-tab-sidebar"
   >
+    <div class="frame-surface">
     <div class="layout-a">
       <nav aria-label="评审区块">
         <p>结算页改版</p>
@@ -49,17 +49,20 @@ const directions = [
       </nav>
       <section>
         <h4>发布清单 · 待评审</h4>
-        <table>
-          <thead><tr><th>条目</th><th>负责人</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td>金额校验文案</td><td>设计</td><td>待确认</td></tr>
-            <tr><td>退款入口位置</td><td>工程</td><td>已通过</td></tr>
-          </tbody>
-        </table>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="发布清单表格">
+          <table>
+            <thead><tr><th>条目</th><th>负责人</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>金额校验文案</td><td>设计</td><td>待确认</td></tr>
+              <tr><td>退款入口位置</td><td>工程</td><td>已通过</td></tr>
+            </tbody>
+          </table>
+        </div>
         <button type="button" disabled>标记已评审（原型阶段开放）</button>
       </section>
     </div>
     <p class="tradeoff">权衡：{directions[0].tradeoff}</p>
+    </div>
   </div>
 
   <div
@@ -68,8 +71,9 @@ const directions = [
     id="wf-panel-steps"
     data-panel="steps"
     aria-labelledby="wf-tab-steps"
-    hidden
+    hidden="until-found"
   >
+    <div class="frame-surface">
     <ol class="steps">
       <li>1 内容</li><li aria-current="step">2 评审人</li><li>3 结论</li>
     </ol>
@@ -80,35 +84,40 @@ const directions = [
       <button type="button" disabled>下一步（原型阶段开放）</button>
     </div>
     <p class="tradeoff">权衡：{directions[1].tradeoff}</p>
+    </div>
   </div>
 
   <style>
     .wf { min-width: 0; font-family: system-ui, sans-serif; color: #333; }
-    .wfbar { display: flex; gap: 0; border: 1px solid #aaa; }
-    .wfbar button { flex: 1 1 auto; padding: 8px 10px; border: 0; border-right: 1px solid #aaa; background: #f2f2f2; font: 12px system-ui, sans-serif; color: #444; cursor: pointer; }
+    .wfbar { display: flex; flex-wrap: nowrap; gap: 0; overflow-x: auto; border: 1px solid #aaa; }
+    .wfbar button { position: relative; flex: 1 0 auto; white-space: nowrap; padding: 8px 10px; border: 0; border-right: 1px solid #aaa; background: #f2f2f2; font: 0.75rem system-ui, sans-serif; color: #444; cursor: pointer; }
     .wfbar button:last-child { border-right: 0; }
-    .wfbar button[aria-selected='true'] { background: #ddd; color: #111; text-decoration: underline; }
-    .frame { min-width: 0; border: 1px solid #aaa; border-top: 0; padding: 12px; background: #fff; }
+    .wfbar button[aria-selected='true'] { color: #111; }
+    .wfbar button[aria-selected='true']::after { content: ''; position: absolute; inset: auto 0 0; border-block-end: 2px solid #111; }
+    .frame { min-width: 0; }
+    .frame-surface { min-width: 0; border: 1px solid #aaa; border-top: 0; padding: 12px; background: #fff; }
+    /* 键盘也能滚动窄屏下的表格：容器可聚焦且有可访问名称。 */
+    .table-scroll { max-inline-size: 100%; overflow-x: auto; container-type: inline-size; }
     .layout-a { display: grid; grid-template-columns: minmax(0, 140px) minmax(0, 1fr); gap: 12px; }
     .layout-a nav { border: 1px solid #bbb; padding: 8px; background: #f7f7f7; }
-    .layout-a nav p { margin: 0 0 8px; font-size: 12px; font-weight: 600; }
-    .layout-a nav ul { margin: 0; padding-left: 16px; font-size: 12px; line-height: 1.9; }
+    .layout-a nav p { margin: 0 0 8px; font-size: 0.75rem; font-weight: 600; }
+    .layout-a nav ul { margin: 0; padding-left: 16px; font-size: 0.75rem; line-height: 1.9; }
     .layout-a section { min-width: 0; border: 1px solid #bbb; padding: 10px; }
-    h4 { margin: 0 0 8px; font: 13px system-ui, sans-serif; font-weight: 600; color: #222; }
-    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    h4 { margin: 0 0 8px; font: 0.8125rem system-ui, sans-serif; font-weight: 600; color: #222; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.6875rem; }
     th, td { border: 1px solid #ccc; padding: 5px 6px; text-align: left; }
     th { background: #f2f2f2; }
-    button:disabled { margin-top: 10px; padding: 5px 10px; border: 1px solid #bbb; background: #eee; color: #666; font: 11px system-ui, sans-serif; }
+    button:disabled { margin-top: 10px; padding: 5px 10px; border: 1px solid #bbb; background: #eee; color: #666; font: 0.6875rem system-ui, sans-serif; }
     .steps { display: flex; gap: 0; margin: 0; padding: 0; list-style: none; border: 1px solid #bbb; }
-    .steps li { flex: 1 1 auto; padding: 7px 8px; border-right: 1px solid #bbb; font-size: 12px; }
+    .steps li { flex: 1 1 auto; padding: 7px 8px; border-right: 1px solid #bbb; font-size: 0.75rem; }
     .steps li:last-child { border-right: 0; }
     .steps li[aria-current='step'] { background: #e2e2e2; font-weight: 600; }
-    .step-body { margin-top: 10px; border: 1px solid #bbb; padding: 10px; font-size: 12px; line-height: 1.8; }
+    .step-body { margin-top: 10px; border: 1px solid #bbb; padding: 10px; font-size: 0.75rem; line-height: 1.8; }
     .step-body p { margin: 0 0 6px; }
-    .tradeoff { margin: 10px 0 0; padding-top: 8px; border-top: 1px dashed #bbb; font-size: 11px; color: #555; }
-    @media (max-width: 560px) {
+    .tradeoff { margin: 10px 0 0; padding-top: 8px; border-top: 1px dashed #bbb; font-size: 0.6875rem; color: #555; }
+    @media (max-width: 35em) {
       .layout-a { grid-template-columns: 1fr; }
-      .wfbar button { font-size: 11px; }
+      .wfbar button { font-size: 0.6875rem; }
     }
   </style>
 </div>

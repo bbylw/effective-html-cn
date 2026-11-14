@@ -40,7 +40,6 @@ const themes = [
           role="tab"
           id={`theme-tab-${theme.id}`}
           data-tab={theme.id}
-          aria-controls={`theme-panel-${theme.id}`}
           aria-selected={i === 0 ? 'true' : 'false'}
         >
           {theme.label}
@@ -57,9 +56,10 @@ const themes = [
         id={`theme-panel-${theme.id}`}
         data-panel={theme.id}
         aria-labelledby={`theme-tab-${theme.id}`}
-        hidden={i > 0}
+        hidden={i > 0 ? 'until-found' : undefined}
         style={`--sheet-bg:${theme.bg};--sheet-fg:${theme.fg};--sheet-muted:${theme.muted}`}
       >
+        <div class="sheet-surface">
         <p class="label">先写设计计划，再写页面</p>
         <div class="swatches">
           {theme.colors.map((color) => (
@@ -76,28 +76,31 @@ const themes = [
           <div><dt>布局</dt><dd>一条竖向评审动线；宽内容独立滚动</dd></div>
         </dl>
         <p class="note">{theme.note}</p>
+        </div>
       </div>
     ))
   }
 
   <style>
     .direction { min-width: 0; font-family: var(--font-sans); }
-    .tabs { display: flex; gap: 6px; }
-    .tabs button { padding: 6px 14px; border: 1px solid var(--color-rule); background: transparent; font: 12px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
-    .tabs button[aria-selected='true'] { border-color: var(--color-accent); color: var(--color-accent); }
-    .sheet { min-width: 0; margin-top: 10px; padding: 16px 18px; background: var(--sheet-bg); color: var(--sheet-fg); border: 1px solid var(--color-rule); }
-    .label { margin: 0; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--sheet-muted); }
+    .tabs { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; }
+    .tabs button { position: relative; flex: 0 0 auto; padding: 6px 14px; border: 1px solid var(--color-rule); background: transparent; font: 0.75rem var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    .tabs button[aria-selected='true'] { color: var(--color-accent); }
+    .tabs button[aria-selected='true']::after { content: ''; position: absolute; inset: auto 0 0; border-block-end: 2px solid var(--color-accent); }
+    .sheet { min-width: 0; }
+    .sheet-surface { min-width: 0; margin-top: 10px; padding: 16px 18px; background: var(--sheet-bg); color: var(--sheet-fg); border: 1px solid var(--color-rule); }
+    .label { margin: 0; font: 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--sheet-muted); }
     .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
-    .swatch { min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--sheet-muted); }
+    .swatch { min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.6875rem; color: var(--sheet-muted); }
     .chip { display: block; height: 34px; border: 1px solid rgba(128, 128, 128, 0.35); }
     .name { color: var(--sheet-fg); }
     .hex { font-family: var(--font-mono); }
     .roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 16px 0 0; padding-top: 12px; border-top: 1px solid rgba(128, 128, 128, 0.35); }
     .roles div { min-width: 0; }
-    dt { font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--sheet-muted); }
-    dd { margin: 4px 0 0; font-size: 12px; line-height: 1.6; color: var(--sheet-fg); }
-    .note { margin: 12px 0 0; font-size: 11px; line-height: 1.7; color: var(--sheet-muted); }
-    @media (max-width: 560px) {
+    dt { font: 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--sheet-muted); }
+    dd { margin: 4px 0 0; font-size: 0.75rem; line-height: 1.6; color: var(--sheet-fg); }
+    .note { margin: 12px 0 0; font-size: 0.6875rem; line-height: 1.7; color: var(--sheet-muted); }
+    @media (max-width: 35em) {
       .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .roles { grid-template-columns: 1fr; }
     }

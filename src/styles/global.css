@@ -40,21 +40,32 @@
 }
 
 @layer base {
+  /* 主体是浅色：让表单控件、滚动条等 UA 界面与纸底一致。 */
+  :root {
+    color-scheme: light;
+  }
+
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
     -webkit-text-size-adjust: 100%;
   }
 
-  @media (max-width: 767px) {
+  /* 深色区域单独声明，避免这些区域里的原生控件用浅色配色。 */
+  .hero,
+  footer,
+  header[data-variant='dark'] {
+    color-scheme: dark;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
     html {
-      scroll-padding-top: 7.5rem;
+      scroll-behavior: smooth;
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @media (max-width: 47.9375em) {
     html {
-      scroll-behavior: auto;
+      scroll-padding-top: 7.5rem;
     }
   }
 
@@ -62,8 +73,8 @@
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 16px;
     line-height: 1.8;
+    overflow-wrap: break-word;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -77,6 +88,13 @@
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  /* 强制颜色模式下作者色会被替换，改用系统高亮色保证焦点可见。 */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline-color: Highlight;
+    }
   }
 
   h1,
@@ -116,7 +134,7 @@
   }
 
   .section-index {
-    @apply flex items-center gap-4 font-mono text-[11px] font-normal uppercase tracking-[0.22em] text-ink-mute;
+    @apply flex items-center gap-4 font-mono text-[0.6875rem] font-normal uppercase tracking-[0.22em] text-ink-mute;
     text-wrap: normal;
   }
 
@@ -141,7 +159,7 @@
   .btn-solid,
   .btn-line,
   .btn-line-dark {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-[13.5px] font-medium tracking-wide transition-colors duration-150;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-[0.84375rem] font-medium tracking-wide transition-colors duration-150;
   }
 
   /* 官网式亮绿主按钮：深字高对比 */
@@ -174,15 +192,6 @@
   }
 }
 
-@utility scrollbar-none {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 @keyframes rise {
   from {
     opacity: 0;
@@ -194,12 +203,72 @@
   }
 }
 
-.rise {
-  animation: rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+/* 默认静态，只在用户未要求减少动效时启用入场动画（而不是声明后再覆盖掉）。 */
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .rise {
-    animation: none;
+/* 面板装饰已移到内部 wrapper；这里保留兜底，防止个别面板隐藏时留下空条。
+   until-found 不用 display:none，只隐藏内容，面板自身的盒子仍会生成。 */
+[hidden='until-found'] {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  min-height: 0 !important;
+}
+
+/* 选中态不靠颜色单独表达：成功时把复制图标换成勾。 */
+[data-copy-check] { display: none; }
+.copy-feedback[data-copied] [data-copy-check] { display: block; }
+.copy-feedback[data-copied] [data-copy-icon] { display: none; }
+
+/* tab 的选中下划线用伪元素边框绘制，强制颜色模式下仍由系统色保留。 */
+@media (forced-colors: active) {
+  [role='tab'][aria-selected='true']::after {
+    border-color: Highlight;
+  }
+}
+
+/* 复制反馈：气泡是按钮外的单一 live region，只用 opacity 显示/隐藏。 */
+.copy-feedback {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.copy-tip {
+  position: absolute;
+  inset-block-end: calc(100% + 0.35rem);
+  inset-inline-end: 0;
+  z-index: 5;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-rule);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: 0.6875rem/1.5 var(--font-sans);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.copy-feedback[data-copied] .copy-tip,
+.copy-feedback[data-failed] .copy-tip {
+  opacity: 1;
+}
+
+/* 强制颜色模式下用系统色保留边界与状态提示。 */
+@media (forced-colors: active) {
+  .copy-tip {
+    border-color: CanvasText;
+  }
+
+  .status[data-state='success'],
+  .status[data-state='error'],
+  .status[data-state='loading'] {
+    border-left-color: CanvasText;
   }
 }

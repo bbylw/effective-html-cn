@@ -30,18 +30,20 @@ const externalLinks = [
             height="28"
             alt=""
             aria-hidden="true"
+            loading="lazy"
+            decoding="async"
             class="h-7 w-7 shrink-0 rounded-[5px] ring-1 ring-white/15"
           />
-          <span class="text-[15px] font-semibold text-paper">Effective HTML</span>
+          <span class="text-[0.9375rem] font-semibold text-paper">Effective HTML</span>
         </div>
-        <p class="measure mt-4 text-[13px] leading-[1.85] text-[#9aa39d]">
+        <p class="measure mt-4 text-[0.8125rem] leading-[1.85] text-[#9aa39d]">
           一组用于创建实用、自包含 HTML 成果的专用智能体技能。本站以落地页、指南与可打开的成果示例呈现它们。
         </p>
       </div>
 
       <nav aria-label="站点导航">
-        <h2 class="font-mono text-[10.5px] uppercase tracking-[0.2em] text-[#7e8881]">站点</h2>
-        <ul class="mt-4 space-y-2.5 text-[13px]">
+        <h2 class="font-mono text-[0.65625rem] uppercase tracking-[0.2em] text-[#7e8881]">站点</h2>
+        <ul class="mt-4 space-y-2.5 text-[0.8125rem]">
           {
             siteLinks.map((item) => (
               <li>
@@ -53,8 +55,8 @@ const externalLinks = [
       </nav>
 
       <nav aria-label="相关资源">
-        <h2 class="font-mono text-[10.5px] uppercase tracking-[0.2em] text-[#7e8881]">相关</h2>
-        <ul class="mt-4 space-y-2.5 text-[13px]">
+        <h2 class="font-mono text-[0.65625rem] uppercase tracking-[0.2em] text-[#7e8881]">相关</h2>
+        <ul class="mt-4 space-y-2.5 text-[0.8125rem]">
           {
             externalLinks.map((item) => (
               <li>
@@ -74,7 +76,7 @@ const externalLinks = [
     </div>
 
     <div
-      class="mt-12 flex flex-col gap-3 border-t border-night-line pt-6 text-[11.5px] text-[#7e8881] sm:flex-row sm:items-center sm:justify-between"
+      class="mt-12 flex flex-col gap-3 border-t border-night-line pt-6 text-[0.71875rem] text-[#7e8881] sm:flex-row sm:items-center sm:justify-between"
     >
       <p>© {year} · 内容编译自
         <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="underline underline-offset-4"

@@ -17,3 +17,5 @@ Thumbs.db
 .workbuddy/
 .workbuddy-ai/
 *.genie
+# 浏览器自动化产生的临时快照
+.playwright-cli/

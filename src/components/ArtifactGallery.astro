@@ -16,7 +16,7 @@ const skills: Skill[] = allSkills;
 <div class="gallery" data-tabs-scope>
   <div class="grid">
     <div
-      class="rail scrollbar-none"
+      class="rail"
       data-tablist
       role="tablist"
       aria-label="选择要查看的技能成果"
@@ -29,7 +29,6 @@ const skills: Skill[] = allSkills;
             role="tab"
             id={`skill-tab-${skill.slug}`}
             data-tab={skill.slug}
-            aria-controls={`skill-panel-${skill.slug}`}
             aria-selected={i === 0 ? 'true' : 'false'}
           >
             <span class="num">{String(i + 1).padStart(2, '0')}</span>
@@ -51,41 +50,44 @@ const skills: Skill[] = allSkills;
             id={`skill-panel-${skill.slug}`}
             data-panel={skill.slug}
             aria-labelledby={`skill-tab-${skill.slug}`}
-            hidden={i > 0}
+            hidden={i > 0 ? 'until-found' : undefined}
           >
-            <header>
-              <p class="eyebrow">{String(i + 1).padStart(2, '0')} / {skill.artifact}</p>
-              <h3>{skill.question}</h3>
-              <p class="use">{skill.use}</p>
-            </header>
+            {/* 装饰放在内部 wrapper：until-found 只隐藏内容，面板自身仍会生成空盒子。 */}
+            <div class="panel-surface">
+              <header>
+                <p class="eyebrow">{String(i + 1).padStart(2, '0')} / {skill.artifact}</p>
+                <h3>{skill.question}</h3>
+                <p class="use">{skill.use}</p>
+              </header>
 
-            <div class="demo">
-              {skill.demo === 'router' && <Router />}
-              {skill.demo === 'bigpics' && <BigPics />}
-              {skill.demo === 'onepager' && <OnePager />}
-              {skill.demo === 'direction' && <Direction />}
-              {skill.demo === 'wireframe' && <Wireframe />}
-              {skill.demo === 'prototype' && <Prototype />}
-              {skill.demo === 'plan' && <Plan />}
-              {skill.demo === 'diagram' && <Diagram />}
-            </div>
-
-            <div class="meta">
-              <div class="contract">
-                <h4>这份 SKILL.md 要求</h4>
-                <ul>
-                  {skill.contract.map((rule) => <li>{rule}</li>)}
-                </ul>
+              <div class="demo">
+                {skill.demo === 'router' && <Router />}
+                {skill.demo === 'bigpics' && <BigPics />}
+                {skill.demo === 'onepager' && <OnePager />}
+                {skill.demo === 'direction' && <Direction />}
+                {skill.demo === 'wireframe' && <Wireframe />}
+                {skill.demo === 'prototype' && <Prototype />}
+                {skill.demo === 'plan' && <Plan />}
+                {skill.demo === 'diagram' && <Diagram />}
               </div>
 
-              <details>
-                <summary>查看结构节选</summary>
-                <pre><code>{artifactSources[skill.demo]}</code></pre>
-              </details>
+              <div class="meta">
+                <div class="contract">
+                  <h4>这份 SKILL.md 要求</h4>
+                  <ul>
+                    {skill.contract.map((rule) => <li>{rule}</li>)}
+                  </ul>
+                </div>
 
-              <a href={skillUrl(skill.slug)} target="_blank" rel="noopener noreferrer">
-                阅读完整 SKILL.md<span class="sr-only">（在新窗口打开）</span>
-              </a>
+                <details>
+                  <summary>查看结构节选</summary>
+                  <pre><code>{artifactSources[skill.demo]}</code></pre>
+                </details>
+
+                <a href={skillUrl(skill.slug)} target="_blank" rel="noopener noreferrer">
+                  阅读完整 SKILL.md<span class="sr-only">（在新窗口打开）</span>
+                </a>
+              </div>
             </div>
           </div>
         ))
@@ -97,30 +99,34 @@ const skills: Skill[] = allSkills;
     .gallery { min-width: 0; font-family: var(--font-sans); }
     .grid { display: grid; grid-template-columns: minmax(0, 230px) minmax(0, 1fr); gap: 16px; min-width: 0; }
     .rail { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-    .rail button { display: flex; align-items: baseline; gap: 10px; width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid var(--color-rule); background: transparent; text-align: left; cursor: pointer; }
-    .rail button[aria-selected='true'] { border-left: 3px solid var(--color-accent); background: var(--color-paper-deep); }
+    .rail button { position: relative; display: flex; align-items: baseline; gap: 10px; width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid var(--color-rule); background: transparent; text-align: left; cursor: pointer; }
+    /* 选中态不改变尺寸：颜色 + 伪元素边框形状，不用背景/box-shadow 单独表意。 */
+    .rail button[aria-selected='true'] { color: var(--color-ink); }
+    .rail button[aria-selected='true']::after { content: ''; position: absolute; inset-block: 0; inset-inline-start: 0; border-inline-start: 3px solid var(--color-accent); }
     .rail button:focus-visible { outline-color: var(--color-ink); }
-    .num { flex: none; font: 10px var(--font-mono); color: var(--color-accent); }
+    .num { flex: none; font: 0.625rem var(--font-mono); color: var(--color-accent); }
     .body { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    .slug { overflow-wrap: anywhere; font: 12px var(--font-mono); color: var(--color-ink); }
-    .type { font-size: 11px; color: var(--color-ink-faint); }
+    .slug { overflow-wrap: anywhere; font: 0.75rem var(--font-mono); color: var(--color-ink); }
+    .type { font-size: 0.6875rem; color: var(--color-ink-faint); }
     .stage { min-width: 0; }
-    .panel { min-width: 0; border: 1px solid var(--color-rule); background: var(--color-paper); }
+    .panel { min-width: 0; }
+    .panel-surface { min-width: 0; border: 1px solid var(--color-rule); background: var(--color-paper); }
     header { padding: 16px 18px; border-bottom: 1px solid var(--color-rule); }
-    .eyebrow { margin: 0; font: 10px var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-faint); }
-    h3 { margin: 8px 0 0; font-family: var(--font-serif); font-size: 19px; font-weight: 600; line-height: 1.45; color: var(--color-ink); }
-    .use { margin: 8px 0 0; font-size: 12px; line-height: 1.8; color: var(--color-ink-mute); }
+    .eyebrow { margin: 0; font: 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-faint); }
+    h3 { margin: 8px 0 0; font-family: var(--font-serif); font-size: 1.1875rem; font-weight: 600; line-height: 1.45; color: var(--color-ink); }
+    .use { margin: 8px 0 0; font-size: 0.75rem; line-height: 1.8; color: var(--color-ink-mute); }
     .demo { min-width: 0; padding: 16px 18px; background: #fffdf9; }
     .meta { min-width: 0; padding: 14px 18px 18px; border-top: 1px solid var(--color-rule); }
-    .contract h4 { margin: 0 0 8px; font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: 0; color: var(--color-ink); }
-    .contract ul { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.85; color: var(--color-ink-soft); }
+    .contract h4 { margin: 0 0 8px; font-family: var(--font-sans); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0; color: var(--color-ink); }
+    .contract ul { margin: 0; padding-left: 18px; font-size: 0.75rem; line-height: 1.85; color: var(--color-ink-soft); }
     details { margin-top: 12px; border-top: 1px solid var(--color-rule-soft); padding-top: 10px; }
-    summary { font: 11px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
-    pre { min-width: 0; max-width: 100%; overflow-x: auto; margin: 10px 0 0; padding: 12px; background: var(--color-paper-deep); font: 11px/1.7 var(--font-mono); color: var(--color-ink-soft); }
-    .meta > a { display: inline-block; margin-top: 12px; font: 11px var(--font-mono); color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
-    @media (max-width: 860px) {
+    summary { font: 0.6875rem var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    pre { min-width: 0; max-width: 100%; overflow-x: auto; margin: 10px 0 0; padding: 12px; background: var(--color-paper-deep); font: 0.6875rem/1.7 var(--font-mono); color: var(--color-ink-soft); }
+    .meta > a { display: inline-block; margin-top: 12px; font: 0.6875rem var(--font-mono); color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 53.75em) {
       .grid { grid-template-columns: 1fr; }
-      .rail { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
+      /* 保留原生滚动条作为主要可滚动提示，因此不需要额外的 fade/shadow 提示。 */
+      .rail { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
       .rail button { flex: 0 0 auto; width: auto; min-width: 132px; }
     }
   </style>

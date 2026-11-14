@@ -29,6 +29,9 @@ const ogImage = publicSite ? new URL('og.png', publicSite) : null;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- 让 1rem 跟随操作系统文字缩放；不支持的浏览器保持默认字号，可用页面缩放。 -->
+    <meta name="text-scale" content="scale" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#faf7f2" />
@@ -54,14 +57,14 @@ const ogImage = publicSite ? new URL('og.png', publicSite) : null;
   <body>
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-[13px] focus:text-paper"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-[0.8125rem] focus:text-paper"
     >
       跳到主要内容
     </a>
 
     <div class="relative z-10 flex min-h-dvh flex-col">
       <SiteHeader variant={variant} />
-      <main id="main" class="flex-1">
+      <main id="main" tabindex="-1" class="flex-1">
         <slot />
       </main>
       <SiteFooter />

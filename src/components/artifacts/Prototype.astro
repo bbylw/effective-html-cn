@@ -4,7 +4,7 @@
   <form data-prototype>
     <div class="field">
       <label for="release-env">发布环境</label>
-      <select id="release-env" name="env">
+      <select id="release-env" name="env" aria-invalid="false">
         <option value="">请选择</option>
         <option value="staging">预发</option>
         <option value="production">生产</option>
@@ -12,9 +12,14 @@
     </div>
 
     <label class="check">
-      <input type="checkbox" name="rollback" />
+      <input type="checkbox" name="rollback" aria-invalid="false" data-error="rollback-error" />
       <span>已确认回滚方案</span>
     </label>
+
+    {/* 错误文本常驻 DOM，但只在 aria-invalid=true 时才被 aria-describedby 引用。 */}
+    <span id="rollback-error" class="error-msg" data-prototype-error hidden>
+      生产发布前必须确认回滚方案。
+    </span>
 
     <button type="submit" disabled>发起审批</button>
   </form>
@@ -33,26 +38,31 @@
 
   <style>
     .proto { min-width: 0; font-family: var(--font-sans); }
-    .scenario { margin: 0 0 12px; font-size: 12px; line-height: 1.7; color: var(--color-ink-mute); }
+    .scenario { margin: 0 0 12px; font-size: 0.75rem; line-height: 1.7; color: var(--color-ink-mute); }
     form { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; padding: 12px; border: 1px solid var(--color-rule); background: #fffdf9; }
     .field { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-    label { font-size: 11px; color: var(--color-ink-mute); }
-    select { padding: 6px 8px; border: 1px solid var(--color-rule); background: #fff; font: 12px var(--font-sans); color: var(--color-ink); }
+    label { font-size: 0.6875rem; color: var(--color-ink-mute); }
+    select { padding: 6px 8px; border: 1px solid var(--color-rule); background: #fff; font: 0.75rem var(--font-sans); color: var(--color-ink); }
     .check { display: inline-flex; align-items: center; gap: 6px; padding-bottom: 7px; }
-    form button[type='submit'] { padding: 7px 14px; border: 1px solid var(--color-ink); background: var(--color-ink); color: var(--color-paper); font: 12px var(--font-sans); cursor: pointer; }
+    .check input[aria-invalid='true'] { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+    .error-msg { flex: 1 0 100%; font-size: 0.6875rem; line-height: 1.6; color: var(--color-accent); }
+    .error-msg[hidden] { display: none; }
+    form button[type='submit'] { padding: 7px 14px; border: 1px solid var(--color-ink); background: var(--color-ink); color: var(--color-paper); font: 0.75rem var(--font-sans); cursor: pointer; }
     form button[type='submit']:disabled { border-color: var(--color-rule); background: var(--color-paper-shade); color: var(--color-ink-faint); cursor: not-allowed; }
-    .status { margin: 10px 0 0; padding: 9px 12px; border: 1px solid var(--color-rule); border-left: 3px solid var(--color-ink-faint); background: var(--color-paper-deep); font-size: 12px; line-height: 1.6; color: var(--color-ink-soft); }
+    .status { margin: 10px 0 0; padding: 9px 12px; border: 1px solid var(--color-rule); border-left: 3px solid var(--color-ink-faint); background: var(--color-paper-deep); font-size: 0.75rem; line-height: 1.6; color: var(--color-ink-soft); }
     .status[data-state='loading'] { border-left-style: dashed; }
     .status[data-state='success'] { border-left-color: #3b6d11; }
     .status[data-state='error'] { border-left-color: var(--color-accent); }
-    .status[data-state='success']::before { content: '✓ '; }
-    .status[data-state='error']::before { content: '! '; }
-    .status[data-state='loading']::before { content: '… '; }
-    .result { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; margin-top: 10px; padding: 10px 12px; border: 1px solid var(--color-rule); font-size: 12px; color: var(--color-ink-soft); }
+    /* 状态文字本身在 DOM 里；这些符号纯装饰，用 / "" 阻止读屏器重复念出。
+       单值声明是旧浏览器不支持 / 语法时的回退。 */
+    .status[data-state='success']::before { content: '✓ '; content: '✓ ' / ""; }
+    .status[data-state='error']::before { content: '! '; content: '! ' / ""; }
+    .status[data-state='loading']::before { content: '… '; content: '… ' / ""; }
+    .result { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; margin-top: 10px; padding: 10px 12px; border: 1px solid var(--color-rule); font-size: 0.75rem; color: var(--color-ink-soft); }
     .result strong { color: var(--color-ink); }
     .result span { font-family: var(--font-mono); }
-    .reset { margin-top: 10px; padding: 5px 10px; border: 1px solid var(--color-rule); background: transparent; font: 11px var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
-    @media (max-width: 560px) {
+    .reset { margin-top: 10px; padding: 5px 10px; border: 1px solid var(--color-rule); background: transparent; font: 0.6875rem var(--font-mono); color: var(--color-ink-mute); cursor: pointer; }
+    @media (max-width: 35em) {
       form { flex-direction: column; align-items: stretch; }
       .check { padding-bottom: 0; }
     }
