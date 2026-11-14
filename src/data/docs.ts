@@ -4,6 +4,8 @@
  * 不逐字翻译原文。每篇都会自动生成一份可复制的 Markdown，方便直接交给智能体。
  */
 
+import { siteHref } from './sitePaths';
+
 export interface DocSection {
   id: string;
   title: string;
@@ -35,7 +37,7 @@ export interface Doc {
 const ex = (slug: string, label: string, note: string) => ({
   label,
   note,
-  href: `/examples/#${slug}`,
+  href: siteHref(`/examples/#${slug}`),
 });
 
 export const docs: Doc[] = [
@@ -112,7 +114,7 @@ export const docs: Doc[] = [
         url: 'https://github.com/nicobailon/visual-explainer',
       },
     ],
-    example: { label: '打开成果目录', note: '八件可交互成果', href: '/examples/' },
+    example: { label: '打开成果目录', note: '八件可交互成果', href: siteHref('/examples/') },
   },
   {
     slug: 'why-html',
@@ -501,7 +503,7 @@ export function getDoc(slug: string): Doc | undefined {
 }
 
 export function docHref(slug: string): string {
-  return slug === 'guide' ? '/docs/' : `/docs/${slug}/`;
+  return siteHref(slug === 'guide' ? '/docs/' : `/docs/${slug}/`);
 }
 
 /** 从结构化内容生成可复制的 Markdown，避免手写两份内容产生漂移。 */

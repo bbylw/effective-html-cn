@@ -1,13 +1,14 @@
 ---
 import { repoUrl } from '../data/skills';
+import { siteHref } from '../data/sitePaths';
 
 const year = new Date().getFullYear();
 
 const siteLinks = [
-  { href: '/', label: '首页' },
-  { href: '/docs/', label: '指南' },
-  { href: '/examples/', label: '成果目录' },
-  { href: '/docs/#install', label: '安装技能集' },
+  { href: siteHref('/'), label: '首页' },
+  { href: siteHref('/docs/'), label: '指南' },
+  { href: siteHref('/examples/'), label: '成果目录' },
+  { href: siteHref('/docs/#install'), label: '安装技能集' },
 ];
 
 const externalLinks = [
@@ -24,7 +25,7 @@ const externalLinks = [
       <div>
         <div class="flex items-center gap-3">
           <img
-            src="/favicon.svg"
+            src={siteHref('/favicon.svg')}
             width="28"
             height="28"
             alt=""

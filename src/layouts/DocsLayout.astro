@@ -10,6 +10,7 @@ import {
   type Doc,
 } from '../data/docs';
 import { installMethods, singleInstall, repoUrl, skillUrl } from '../data/skills';
+import { siteHref } from '../data/sitePaths';
 
 interface Props {
   doc: Doc;
@@ -69,7 +70,7 @@ const next = index < docs.length - 1 ? docs[index + 1] : undefined;
           </nav>
 
           <div class="sidebar-foot">
-            <a href="/examples/">成果目录</a>
+            <a href={siteHref('/examples/')}>成果目录</a>
             <a href={repoUrl} target="_blank" rel="noopener noreferrer">
               GitHub<span class="sr-only">（在新窗口打开）</span>
             </a>

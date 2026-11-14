@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ArtifactGallery from '../components/ArtifactGallery.astro';
 import { buildContracts, skillCount } from '../data/skills';
+import { siteHref } from '../data/sitePaths';
 
 const description =
   '八件可直接打开、可键盘操作的 HTML 成果：请求路由、大图小字、一页纸、设计计划、低保真线框、可跑原型、发布计划与关系图。';
@@ -17,8 +18,8 @@ const description =
         审批状态都是可用的。宽窄屏都能打开，源码结构也可以就地查看。
       </p>
       <div class="actions">
-        <a href="/docs/" class="btn-line">返回指南</a>
-        <a href="/" class="btn-line">首页</a>
+        <a href={siteHref('/docs/')} class="btn-line">返回指南</a>
+        <a href={siteHref('/')} class="btn-line">首页</a>
       </div>
     </div>
   </section>

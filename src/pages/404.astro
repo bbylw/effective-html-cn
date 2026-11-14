@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { siteHref } from '../data/sitePaths';
 ---
 
 <Layout
@@ -21,7 +22,7 @@ import Layout from '../layouts/Layout.astro';
     </p>
 
     <div class="mt-9">
-      <a href="/" class="btn-solid">
+      <a href={siteHref('/')} class="btn-solid">
         回到首页
 
       </a>

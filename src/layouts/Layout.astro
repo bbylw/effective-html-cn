@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { siteHref } from '../data/sitePaths';
 
 interface Props {
   title: string;
@@ -20,7 +21,7 @@ const publicSite =
     ? Astro.site
     : null;
 const canonical = publicSite && !noindex ? new URL(Astro.url.pathname, publicSite) : null;
-const ogImage = publicSite ? new URL('/og.png', publicSite) : null;
+const ogImage = publicSite ? new URL('og.png', publicSite) : null;
 ---
 
 <!doctype html>
@@ -33,7 +34,7 @@ const ogImage = publicSite ? new URL('/og.png', publicSite) : null;
     <meta name="theme-color" content="#faf7f2" />
     {canonical && <link rel="canonical" href={canonical.href} />}
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={siteHref('/favicon.svg')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />

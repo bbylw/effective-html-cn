@@ -1,5 +1,6 @@
 ---
 import { repoUrl } from '../data/skills';
+import { siteHref } from '../data/sitePaths';
 
 interface Props {
   variant?: 'dark' | 'light';
@@ -9,8 +10,8 @@ const { variant = 'light' } = Astro.props;
 const dark = variant === 'dark';
 
 const nav = [
-  { href: '/examples/', label: '成果目录' },
-  { href: '/docs/', label: '指南' },
+  { href: siteHref('/examples/'), label: '成果目录' },
+  { href: siteHref('/docs/'), label: '指南' },
 ];
 ---
 
@@ -23,9 +24,9 @@ const nav = [
   ]}
 >
   <div class="shell flex h-16 items-center justify-between gap-6">
-    <a href="/" class="group flex items-center gap-3" aria-label="Effective HTML 首页">
+    <a href={siteHref('/')} class="group flex items-center gap-3" aria-label="Effective HTML 首页">
       <img
-        src="/favicon.svg"
+        src={siteHref('/favicon.svg')}
         width="28"
         height="28"
         alt=""
