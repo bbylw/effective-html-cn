@@ -37,7 +37,10 @@ jobs:
           PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
           PAGES_PATH: ${{ steps.pages.outputs.base_path }}
         run: |
-          export SITE_URL="${PAGES_ORIGIN%/}${PAGES_PATH}/"
+          # Pages API 可能返回 http:// 的 origin，canonical / sitemap 一律用 https。
+          ORIGIN="${PAGES_ORIGIN#http://}"
+          ORIGIN="${ORIGIN#https://}"
+          export SITE_URL="https://${ORIGIN%/}${PAGES_PATH}/"
           export SITE_BASE="${PAGES_PATH:-/}"
           echo "SITE_URL=$SITE_URL  SITE_BASE=$SITE_BASE"
           bun run build

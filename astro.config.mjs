@@ -13,7 +13,11 @@ export default defineConfig({
   site,
   base: siteBase,
   trailingSlash: 'always',
-  integrations: site ? [sitemap({ filter: (page) => !page.includes('404') })] : [],
+  // 只排除 404 页本身。不能写成 !page.includes('404')：自定义域名里可能带 404
+  // （例如 w404.nyc.mn），那样会把整站的 URL 全部误过滤掉。
+  integrations: site
+    ? [sitemap({ filter: (page) => !/\/404(?:\.html)?\/?$/.test(new URL(page).pathname) })]
+    : [],
   vite: {
     plugins: [tailwindcss()],
     resolve: {
